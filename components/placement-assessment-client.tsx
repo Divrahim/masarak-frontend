@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  ArrowRight,
+  ArrowLeft,
   UploadCloud,
   CheckCircle2,
 } from "lucide-react";
@@ -53,20 +53,20 @@ export default function PlacementAssessmentClient() {
         (question) => answers[question.id],
       )
     ) {
-      setError("Please answer every question before submitting.");
+      setError("جاوب على كل الأسئلة قبل التسليم.");
       return;
     }
 
     if (cvFile) {
       if (cvFile.size > MAX_FILE_SIZE) {
-        setError("Your CV must be 5 MB or smaller.");
+        setError("حجم الـCV لازم يكون ٥ ميجا أو أقل.");
         return;
       }
 
       const extension = cvFile.name.split(".").pop()?.toLowerCase();
 
       if (!extension || !MIME_TYPES[extension]) {
-        setError("Upload your CV as a PDF, DOC, or DOCX file.");
+        setError("ارفع الـCV بصيغة PDF أو DOC أو DOCX.");
         return;
       }
     }
@@ -103,7 +103,7 @@ export default function PlacementAssessmentClient() {
 
       if (!recommendedModule) {
         setError(
-          "The recommended module isn't configured in the current roadmap.",
+          "المرحلة المقترحة مش مضبوطة في الخريطة الحالية.",
         );
         return;
       }
@@ -118,7 +118,7 @@ export default function PlacementAssessmentClient() {
       setError(
         caught instanceof Error
           ? caught.message
-          : "We couldn't evaluate your answers. Please try again.",
+          : "معرفنش نقيّم إجاباتك. جرّب تاني.",
       );
     } finally {
       setSubmitting(false);
@@ -131,34 +131,31 @@ export default function PlacementAssessmentClient() {
         <CheckCircle2 size={36} />
 
         <h2 className="mt-4 text-2xl font-semibold">
-          Assessment completed
+          التقييم اكتمل
         </h2>
 
         <p className="mt-3">
-          Your overall score is{" "}
-          <strong>{result.overallScore}%</strong>.
+          نتيجتك الكلية <strong>{result.overallScore}%</strong>.
         </p>
 
         <p className="mt-2">
-          Modules mastered through this assessment:{" "}
+          المراحل اللي أتقنتها من التقييم ده:{" "}
           <strong>{result.validatedModuleIds.length}</strong>.
         </p>
 
         <p className="mt-4">
-          Your suggested starting point is{" "}
+          نقطة البداية المقترحة ليك:{" "}
           <strong>{result.recommendedStartModuleTitle}</strong>.
         </p>
 
         <p className="mt-2 text-sm text-gray-500">
-          This is a provisional placement result based on your
-          answers. Your assessment is currently processed locally
-          and has not been saved to an account.
+          دي نتيجة مبدئية بناءً على إجاباتك. التقييم بيتعمل محليًا
+          دلوقتي ومحفوظش في أي حساب.
         </p>
 
         {cvFile && (
           <p className="mt-2 text-sm text-gray-500">
-            Your CV ({cvFile.name}) was selected for this session,
-            but it was not uploaded or stored.
+            الـCV ({cvFile.name}) اتحط للجلسة دي بس، ومتخزنش في أي مكان.
           </p>
         )}
 
@@ -172,15 +169,15 @@ export default function PlacementAssessmentClient() {
               );
             }}
           >
-            Open recommended module
-            <ArrowRight size={17} />
+            افتح المرحلة المقترحة
+            <ArrowLeft size={17} />
           </button>
 
           <Link
             href="/dashboard"
             className="button-secondary"
           >
-            Go to dashboard
+            افتح لوحة التحكم
           </Link>
         </div>
       </section>
@@ -194,12 +191,12 @@ export default function PlacementAssessmentClient() {
           htmlFor="placement-cv"
           className="block text-lg font-semibold"
         >
-          Attach your CV (optional)
+          ارفق الـCV (اختياري)
         </label>
 
         <p className="mt-2 text-sm text-gray-500">
-          PDF, DOC, or DOCX. Maximum size: 5 MB.
-          The file is selected locally and will not be uploaded.
+          PDF أو DOC أو DOCX. الحد الأقصى ٥ ميجا. الملف بيتاختار
+          محليًا ومش هيتقّع على السيرفر.
         </p>
 
         <div className="cv-upload-control">
@@ -221,12 +218,12 @@ export default function PlacementAssessmentClient() {
           >
             <UploadCloud size={20} />
             <span>
-              {cvFile ? "Change CV file" : "Choose your CV"}
+              {cvFile ? "غيّر ملف الـCV" : "اختار الـCV بتاعك"}
             </span>
           </label>
 
           <span className="cv-upload-hint">
-            PDF, DOC, or DOCX · Up to 5 MB
+            PDF أو DOC أو DOCX · حتى ٥ ميجا
           </span>
         </div>
 
@@ -244,7 +241,7 @@ export default function PlacementAssessmentClient() {
           className="panel quiz-question-card"
         >
           <div className="quiz-question-number">
-            Question {index + 1} of {placementQuestions.length}
+            السؤال {index + 1} من {placementQuestions.length}
           </div>
 
           <h2>{question.prompt}</h2>
@@ -292,8 +289,8 @@ export default function PlacementAssessmentClient() {
 
       <div className="quiz-actions">
         <span className="stat-note">
-          {Object.keys(answers).length} of{" "}
-          {placementQuestions.length} answered
+          جاوبت على {Object.keys(answers).length} من{" "}
+          {placementQuestions.length}
         </span>
 
         <button
@@ -301,9 +298,9 @@ export default function PlacementAssessmentClient() {
           className="button-primary"
           disabled={submitting}
         >
-          {submitting ? "Evaluating..." : "Submit assessment"}
+          {submitting ? "بنقيّم إجاباتك..." : "سلّم التقييم"}
 
-          {!submitting && <ArrowRight size={17} />}
+          {!submitting && <ArrowLeft size={17} />}
         </button>
       </div>
     </form>

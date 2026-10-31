@@ -3,11 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { CircleUserRound, LogOut } from "lucide-react";
 import {
   Home,
   LayoutDashboard,
   Map,
 } from "lucide-react";
+
+import { signOutAction } from "@/app/auth/actions";
 
 const navigation = [
   { href: "/", label: "الرئيسية", icon: Home },
@@ -19,7 +22,15 @@ const navigation = [
   },
 ];
 
-export default function SiteHeader() {
+export type HeaderSession = {
+  displayName: string;
+} | null;
+
+export default function SiteHeader({
+  session,
+}: {
+  session?: HeaderSession;
+}) {
   const pathname = usePathname();
 
   return (
@@ -65,13 +76,41 @@ export default function SiteHeader() {
         </nav>
 
         <div className="header-auth-actions">
-          <Link href="/login" className="button-secondary">
-            تسجيل الدخول
-          </Link>
+          {session ? (
+            <>
+              <Link
+                href="/profile"
+                className="header-user-chip"
+                aria-label={`ملف ${session.displayName} الشخصي`}
+              >
+                <CircleUserRound size={19} strokeWidth={1.8} />
+                <span className="header-user-name">
+                  {session.displayName}
+                </span>
+              </Link>
 
-          <Link href="/signup" className="button-primary">
-            إنشاء حساب
-          </Link>
+              <form action={signOutAction}>
+                <button
+                  type="submit"
+                  className="header-signout"
+                  aria-label="تسجيل الخروج من حسابك"
+                >
+                  <LogOut size={15} strokeWidth={1.8} />
+                  <span>خروج</span>
+                </button>
+              </form>
+            </>
+          ) : (
+            <>
+              <Link href="/login" className="button-secondary">
+                تسجيل الدخول
+              </Link>
+
+              <Link href="/signup" className="button-primary">
+                إنشاء حساب
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>

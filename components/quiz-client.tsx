@@ -5,8 +5,8 @@ import { useState } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
-  ArrowRight,
   CheckCircle2,
+  Loader2,
   RotateCcw,
   Trophy,
   XCircle,
@@ -89,7 +89,7 @@ export default function QuizClient({
       setSubmission(result);
     } catch {
       setSubmitError(
-        "Something went wrong while saving your result. Please try again.",
+        "حصلت مشكلة أثناء حفظ نتيجتك. جرّب تاني.",
       );
     } finally {
       setSubmitting(false);
@@ -107,7 +107,10 @@ export default function QuizClient({
   if (!hydrated) {
     return (
       <div className="page-container">
-        <p className="stat-note">Loading learning progress...</p>
+        <div className="dashboard-loading" role="status">
+          <Loader2 size={22} className="dashboard-loading-spinner" />
+          <span>بنجهّز بيانات تقدمك...</span>
+        </div>
       </div>
     );
   }
@@ -120,7 +123,7 @@ export default function QuizClient({
         </p>
 
         <Link href="/roadmap" className="text-link">
-          <ArrowLeft size={16} /> Back to roadmap
+          <ArrowLeft size={16} /> رجوع لخريطة المسار
         </Link>
       </div>
     );
@@ -130,21 +133,20 @@ export default function QuizClient({
     return (
       <div className="page-container quiz-page">
         <Link href="/roadmap" className="text-link">
-          <ArrowLeft size={16} /> Back to roadmap
+          <ArrowLeft size={16} /> رجوع لخريطة المسار
         </Link>
 
         <section className="panel quiz-result">
           <XCircle size={34} />
 
-          <h1>This stage is locked</h1>
+          <h1>المرحلة دي مقفولة</h1>
 
           <p>
-            Complete the prerequisite stages by passing their
-            quizzes before starting this one.
+            كمّل اختبارات المراحل المطلوبة الأول قبل ما تبدأ دي.
           </p>
 
           <Link href="/roadmap" className="button-primary">
-            View prerequisites <ArrowRight size={17} />
+            شوف المتطلبات <ArrowLeft size={17} />
           </Link>
         </section>
       </div>
@@ -154,42 +156,41 @@ export default function QuizClient({
   return (
     <div className="page-container quiz-page">
       <div className="breadcrumbs">
-        <Link href="/">Home</Link>
+        <Link href="/">الرئيسية</Link>
         <span>/</span>
-        <Link href="/roadmap">Roadmap</Link>
+        <Link href="/roadmap">خريطة المسار</Link>
         <span>/</span>
         <Link href={`/roadmap/${moduleId}`}>
           {moduleTitle}
         </Link>
         <span>/</span>
-        <span>Quiz</span>
+        <span>الاختبار</span>
       </div>
 
       <header className="quiz-header">
-        <span className="eyebrow">Knowledge checkpoint</span>
+        <span className="eyebrow">اختبار المرحلة</span>
 
         <h1>{quiz.title}</h1>
 
         <p>
-          Answer all {quiz.questions.length} questions. You need{" "}
-          {quiz.passPercentage}% to pass and unlock the next eligible
-          stage.
+          جاوب على كل الأسئلة ({quiz.questions.length}). محتاج{" "}
+          {quiz.passPercentage}% عشان تعدّي وتفتح المرحلة اللي بعدها.
         </p>
 
         <div className="module-meta">
-          <span>{quiz.questions.length} questions</span>
+          <span>{quiz.questions.length} أسئلة</span>
           <span>·</span>
-          <span>{quiz.passPercentage}% required to pass</span>
+          <span>المطلوب للنجاح {quiz.passPercentage}%</span>
           <span>·</span>
           <span>
-            Attempts: {attemptsByModule[moduleId] ?? 0}
+            المحاولات: {attemptsByModule[moduleId] ?? 0}
           </span>
 
           {bestScoresByModule[moduleId] !== undefined && (
             <>
               <span>·</span>
               <span>
-                Best score: {bestScoresByModule[moduleId]}%
+                أعلى نتيجة: {bestScoresByModule[moduleId]}%
               </span>
             </>
           )}
@@ -204,7 +205,7 @@ export default function QuizClient({
               key={item.id}
             >
               <div className="quiz-question-number">
-                Question {index + 1} of {quiz.questions.length}
+                السؤال {index + 1} من {quiz.questions.length}
               </div>
 
               <h2>{item.prompt}</h2>
@@ -243,7 +244,7 @@ export default function QuizClient({
 
           {showIncompleteMessage && (
             <p className="quiz-validation" role="alert">
-              Please answer every question before submitting.
+              جاوب على كل الأسئلة قبل التسليم.
             </p>
           )}
 
@@ -252,7 +253,7 @@ export default function QuizClient({
               {submitError}{" "}
               {requiresAuth && (
                 <Link href="/login" className="text-link">
-                  Sign in
+                  سجّل دخولك
                 </Link>
               )}
             </p>
@@ -263,7 +264,7 @@ export default function QuizClient({
               href={`/roadmap/${moduleId}`}
               className="button-secondary"
             >
-              <ArrowLeft size={16} /> Back to module
+              <ArrowLeft size={16} /> رجوع للمرحلة
             </Link>
 
             <button
@@ -272,9 +273,9 @@ export default function QuizClient({
               onClick={handleSubmit}
               disabled={submitting}
             >
-              {submitting ? "Saving result..." : "Submit answers"}
+              {submitting ? "بنحفظ نتيجتك..." : "سلّم إجاباتك"}
 
-              {!submitting && <ArrowRight size={17} />}
+              {!submitting && <ArrowLeft size={17} />}
             </button>
           </div>
         </div>
@@ -291,17 +292,18 @@ export default function QuizClient({
               passed ? "completed" : "locked"
             }`}
           >
-            {passed ? "Quiz passed" : "Not passed yet"}
+            {passed ? "عدّيت الاختبار" : "لسه ما عدّيتش"}
           </span>
 
           <h2>
-            {score}% — {correctCount} of {quiz.questions.length} correct
+            {score}% — {correctCount} من {quiz.questions.length} إجابات
+            صحيحة
           </h2>
 
           <p>
             {passed
-              ? "You passed! Your result has been saved to your Masarak account, and the next eligible stage is now unlocked."
-              : `You need at least ${quiz.passPercentage}% to pass. Review the explanations below, then try again.`}
+              ? "مبروك! نتيجتك اتحفظت في حسابك في مسارك، والمرحلة اللي بعدها بقت متاحة."
+              : `محتاج ${quiz.passPercentage}% على الأقل عشان تعدّي. راجع الشرح تحت وجرّب تاني.`}
           </p>
 
           <div className="quiz-review">
@@ -335,13 +337,13 @@ export default function QuizClient({
                   </div>
 
                   <p>
-                    Your answer:{" "}
-                    {selectedAnswer?.label ?? "No answer"}
+                    إجابتك:{" "}
+                    {selectedAnswer?.label ?? "مفيش إجابة"}
                   </p>
 
                   {!correct && (
                     <p>
-                      Correct answer: {correctAnswer?.label}
+                      الإجابة الصحيحة: {correctAnswer?.label}
                     </p>
                   )}
 
@@ -358,7 +360,7 @@ export default function QuizClient({
               href={`/roadmap/${moduleId}`}
               className="button-secondary"
             >
-              Back to module
+              رجوع للمرحلة
             </Link>
 
             {passed && nextModule ? (
@@ -366,12 +368,12 @@ export default function QuizClient({
                 href={`/roadmap/${nextModule.id}`}
                 className="button-primary"
               >
-                Continue to {nextModule.title}{" "}
-                <ArrowRight size={17} />
+                كمّل إلى {nextModule.title}{" "}
+                <ArrowLeft size={17} />
               </Link>
             ) : passed ? (
               <Link href="/dashboard" className="button-primary">
-                View dashboard <ArrowRight size={17} />
+                افتح لوحة التحكم <ArrowLeft size={17} />
               </Link>
             ) : (
               <button
@@ -379,7 +381,7 @@ export default function QuizClient({
                 className="button-primary"
                 onClick={handleRetry}
               >
-                <RotateCcw size={17} /> Try again
+                <RotateCcw size={17} /> جرّب تاني
               </button>
             )}
           </div>

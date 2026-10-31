@@ -6,6 +6,7 @@ import {
   ArrowLeft,
   CheckCircle2,
   Clock3,
+  Loader2,
   LockKeyhole,
   Route,
   Sparkles,
@@ -39,9 +40,10 @@ export default function RoadmapClient() {
   if (!hydrated) {
     return (
       <div className="page-container roadmap-loading" dir="rtl">
-        <p className="stat-note">
-          جاري تحميل تقدمك في المسار...
-        </p>
+        <div className="dashboard-loading" role="status">
+          <Loader2 size={22} className="dashboard-loading-spinner" />
+          <span>جاري تحميل تقدمك في المسار...</span>
+        </div>
       </div>
     );
   }

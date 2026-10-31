@@ -1,7 +1,7 @@
 
 import Link from "next/link";
 import {
-  ArrowRight,
+  ArrowLeft,
   BookOpen,
   ClipboardCheck,
   Compass,
@@ -13,15 +13,14 @@ export default function OnboardingPage() {
       <header className="onboarding-heading">
         <span className="eyebrow">
           <span className="eyebrow-dot" />
-          Personalize your journey
+          خصّص رحلتك
         </span>
 
-        <h1>Where would you like to start?</h1>
+        <h1>عايز تبدأ منين؟</h1>
 
         <p>
-          Everyone starts somewhere different. Choose the
-          option that fits you, and Masarak will help you
-          decide what to focus on next.
+          كل واحد بيبدأ من مكان مختلف. اختار الخيار اللي يناسبك،
+          ومسارك هيساعدك تحدد تركيزك الجاي.
         </p>
       </header>
 
@@ -32,15 +31,14 @@ export default function OnboardingPage() {
           </div>
 
           <span className="onboarding-option-label">
-            OPTION 01
+            الخيار 01
           </span>
 
-          <h2>Start from scratch</h2>
+          <h2>ابدأ من الصفر</h2>
 
           <p>
-            Begin with the foundations and move forward
-            step by step. Choose this option if you prefer
-            to learn everything from the beginning.
+            ابدأ بالأساسيات وامشي خطوة بخطوة. اختار الخيار ده لو
+            تحب تتعلم كل حاجة من البداية.
           </p>
 
           <div className="onboarding-option-action">
@@ -48,8 +46,8 @@ export default function OnboardingPage() {
               href="/dashboard"
               className="button-primary onboarding-button"
             >
-              Start learning
-              <ArrowRight size={18} />
+              ابدأ التعلم
+              <ArrowLeft size={18} />
             </Link>
           </div>
         </section>
@@ -60,31 +58,29 @@ export default function OnboardingPage() {
           </div>
 
           <span className="onboarding-option-label">
-            OPTION 02
+            الخيار 02
           </span>
 
-          <h2>Assess my current skills</h2>
+          <h2>قيّم مهاراتك الحالية</h2>
 
           <p>
-            Answer a set of initial questions to estimate
-            what you already know and identify a suggested
-            starting point. You can optionally attach your CV.
+            جاوب على مجموعة أسئلة أولية عشان نقدّر اللي تعرفه
+            ونحدد نقطة بداية مقترحة ليك. وتقدر ترفق الـCV لو حابب.
           </p>
 
           <Link
             href="/onboarding/assessment"
             className="button-primary onboarding-button"
           >
-            Take assessment
-            <ArrowRight size={18} />
+            ابدأ التقييم
+            <ArrowLeft size={18} />
           </Link>
         </section>
       </div>
 
       <p className="onboarding-footnote">
         <Compass size={16} />
-        The current assessment and learning stages are
-        provisional and will be customized for Masarak.
+        التقييم والمراحل الحالية مبدئيين وهيتخصصوا لمسارك.
       </p>
     </div>
   );

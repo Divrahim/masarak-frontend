@@ -87,7 +87,9 @@
 
   a:focus-visible {
 
-    outline: 3px solid #b9b1ff;
+    /* [STAGE-B] unified brand amber focus ring (was legacy purple #b9b1ff) */
+
+    outline: var(--mas-focus-ring);
 
     outline-offset: 3px;
 
@@ -267,7 +269,9 @@
 
   .button-secondary:hover {
 
-    background: #f5f4ff;
+    /* [STAGE-B] aligned to brand soft-teal (was legacy purple tint #f5f4ff; already shadowed by brand layer) */
+
+    background: var(--mas-soft-teal);
 
   }
 
@@ -487,9 +491,11 @@
 
     border-radius: 999px;
 
-    background: #eeecff;
+    /* [STAGE-B] aligned to brand-layer values (was legacy purple #eeecff/#5343ce); no visible change */
 
-    color: #5343ce;
+    background: var(--soft-sage);
+
+    color: #52776c;
 
     font-size: 11px;
 
@@ -751,7 +757,9 @@
 
     background: white;
 
-    color: #30256d;
+    /* [STAGE-B] brand ink instead of legacy purple #30256d (approved visible correction) */
+
+    color: var(--mas-primary);
 
     flex-shrink: 0;
 
@@ -1031,25 +1039,31 @@
 
   .status-pill.completed {
 
-    color: #087354;
+    /* [STAGE-B] aligned to brand tokens (matches brand layer at ~L3058); no visible change */
 
-    background: #e5f7ef;
+    color: var(--mas-success);
+
+    background: var(--mas-success-tint);
 
   }
 
   .status-pill.current {
 
-    color: #5544cf;
+    /* [STAGE-B] amber instead of legacy purple (matches brand layer at ~L3066); no visible change */
 
-    background: #eeecff;
+    color: var(--mas-amber-text);
+
+    background: var(--mas-soft-amber);
 
   }
 
   .status-pill.locked {
 
-    color: #667085;
+    /* [STAGE-B] aligned to brand-layer neutral values (matches ~L3074); no visible change */
 
-    background: #eef0f4;
+    color: #7a8986;
+
+    background: #eff2ef;
 
   }
 
@@ -1587,7 +1601,7 @@
 
     border-radius: 999px;
 
-    background: #5b4ce2;
+    background: #4e8975;
 
   }
 
@@ -1967,11 +1981,13 @@
 
     padding: 11px 13px;
 
-    color: #172033;
+    /* [STAGE-B] brand ink + border tokens (was slate #172033 / cool border #d9dfeb) */
+
+    color: var(--mas-primary);
 
     background: #ffffff;
 
-    border: 1px solid #d9dfeb;
+    border: 1px solid var(--mas-border);
 
     border-radius: 10px;
 
@@ -2529,7 +2545,9 @@
 
   .cv-file-input:focus-visible + .cv-upload-button {
 
-    outline: 3px solid #b9b1ff;
+    /* [STAGE-B] unified brand amber focus ring (was legacy purple #b9b1ff) */
+
+    outline: var(--mas-focus-ring);
 
     outline-offset: 3px;
 
@@ -3586,6 +3604,14 @@
     align-items: center;
 
     justify-content: space-between;
+
+  }
+
+  .masarak-preview-header > div:first-child {
+
+    flex-direction: column;
+
+    align-items: flex-start;
 
   }
 
@@ -6053,6 +6079,82 @@
   border-radius: 10px;
 }
 
+/* [STAGE-D] Signed-in header state: user chip + sign-out. Reads the demo
+   session cookie for display only; all colors from brand tokens. */
+.site-header .header-user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 44px;
+  padding-inline: 13px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--mas-primary) 16%, transparent);
+  background: var(--mas-sage);
+  color: var(--mas-primary);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.site-header .header-user-chip:hover {
+  border-color: color-mix(in srgb, var(--mas-primary) 34%, transparent);
+  background: color-mix(in srgb, var(--mas-sage) 72%, #ffffff);
+}
+
+.site-header .header-user-chip:focus-visible {
+  outline: 2px solid var(--mas-amber);
+  outline-offset: 2px;
+}
+
+.site-header .header-user-name {
+  max-width: 15ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.site-header .header-signout {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding-inline: 14px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--mas-primary) 16%, transparent);
+  background: var(--mas-surface);
+  color: var(--mas-primary);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.18s ease, color 0.18s ease,
+    background-color 0.18s ease;
+}
+
+.site-header .header-signout:hover {
+  border-color: color-mix(in srgb, var(--mas-danger, #b42318) 42%, transparent);
+  color: var(--mas-danger, #b42318);
+  background: color-mix(in srgb, var(--mas-danger, #b42318) 6%, #ffffff);
+}
+
+.site-header .header-signout:focus-visible {
+  outline: 2px solid var(--mas-amber);
+  outline-offset: 2px;
+}
+
+@media (max-width: 760px) {
+  .site-header .header-user-chip .header-user-name {
+    display: none;
+  }
+
+  .site-header .header-user-chip,
+  .site-header .header-signout {
+    min-height: 40px;
+    padding-inline: 11px;
+  }
+}
+
 @media (max-width: 900px) {
   .site-header .nav-container {
     width: calc(100% - 32px);
@@ -6075,6 +6177,7 @@
 
 @media (max-width: 760px) {
   .site-header .nav-container {
+    display: grid;
     grid-template-columns: 1fr auto;
     gap: 12px;
   }
@@ -6916,4 +7019,470 @@
   .roadmap-progress-track span {
     transition: none;
   }
+}
+
+/* =========================================================
+   Dashboard loading & empty states (Phase 1)
+   ========================================================= */
+
+.dashboard-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 40vh;
+  color: #607574;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.dashboard-loading-spinner {
+  color: #4e8975;
+  animation: dashboard-spin 900ms linear infinite;
+}
+
+@keyframes dashboard-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.dashboard-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  padding: 26px 18px;
+}
+
+.dashboard-empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #e8f0eb;
+  color: #4e8975;
+  margin-bottom: 8px;
+}
+
+.dashboard-empty h3 {
+  font-size: 15px;
+  color: #173b43;
+}
+
+.dashboard-empty p {
+  font-size: 13px;
+  color: #84958d;
+}
+
+/* =========================================================
+   [STAGE-B] MASARAK DESIGN SYSTEM FOUNDATION — additive layer
+   Source: approved Stage A Visual Audit §7 (all values derived
+   from those already present in this codebase — nothing invented).
+   Nothing above this block was deleted or replaced; legacy rules
+   keep working until the separately-approved cleanup stage.
+   ========================================================= */
+
+:root {
+  /* --- Identity colors --- */
+  --mas-primary: #173b43;
+  --mas-primary-dark: #102f36;
+  --mas-sage: #e8f0eb;
+  --mas-amber: #e9aa4b;
+  --mas-bg: #f5f8f5;
+  --mas-surface: #ffffff;
+  --mas-muted: #687d7c;
+  --mas-border: #e3eae5;
+
+  /* Hairline: borders/dividers first, shadows only for elevation */
+  --mas-hairline: rgb(23 59 67 / 10%);
+
+  /* --- Amber derivatives (unify the ad-hoc amber tints) --- */
+  --mas-amber-hover: #f2bd6d;
+  --mas-amber-tint: #fff4e4;
+  --mas-amber-text: #b47a2c;
+
+  /* --- Soft tints (aliases of existing identity values) --- */
+  --mas-soft-teal: #edf4f1;  /* = existing --soft-teal */
+  --mas-soft-sage: #e8f0eb;  /* = existing --soft-sage */
+  --mas-soft-amber: #fff4e4; /* = existing --soft-amber */
+
+  /* --- Semantic states --- */
+  --mas-success: #23745f;
+  --mas-success-tint: #e6f2eb;
+  --mas-danger: #b42318;
+  --mas-danger-tint: #fef2f2;
+
+  /* --- Typography tokens (applied per page during Stage C, not globally) --- */
+  --mas-font-display: "Alexandria", "IBM Plex Sans Arabic", sans-serif;
+  --mas-font-body: "IBM Plex Sans Arabic", "Tajawal", "Noto Sans Arabic", Arial, sans-serif;
+  --mas-text-display: 2.5rem;     /* 40px, line-height 44/40 */
+  --mas-text-display-lh: 1.1;
+  --mas-text-h1: 1.875rem;        /* 30px */
+  --mas-text-h2: 1.375rem;        /* 22px */
+  --mas-text-h3: 1.125rem;        /* 18px */
+  --mas-text-body: 0.9375rem;     /* 15px */
+  --mas-text-body-lg: 1rem;       /* 16px */
+  --mas-text-small: 0.875rem;     /* 14px */
+  --mas-text-caption: 0.78125rem; /* 12.5px */
+
+  /* --- Spacing scale (4px base) --- */
+  --mas-space-1: 4px;
+  --mas-space-2: 8px;
+  --mas-space-3: 12px;
+  --mas-space-4: 16px;
+  --mas-space-6: 24px;
+  --mas-space-8: 32px;
+  --mas-space-12: 48px;
+  --mas-space-16: 64px;
+  --mas-space-24: 96px;
+
+  /* --- Radius scale --- */
+  --mas-radius-sm: 8px;    /* small fields / badges */
+  --mas-radius-md: 10px;   /* buttons / inputs */
+  --mas-radius-lg: 12px;   /* standard cards */
+  --mas-radius-xl: 16px;   /* large panels */
+  --mas-radius-pill: 999px;
+
+  /* --- Elevation: three restrained layers --- */
+  --mas-shadow-e1: 0 1px 2px rgb(23 59 67 / 5%), 0 2px 8px rgb(23 59 67 / 4%);
+  --mas-shadow-e2: 0 6px 16px rgb(23 59 67 / 8%);
+  --mas-shadow-e3: 0 12px 32px rgb(23 59 67 / 7%); /* = existing --shadow-soft */
+
+  /* --- Focus ring (brand amber) --- */
+  --mas-focus-ring: 3px solid rgb(233 170 75 / 85%);
+  --mas-focus-ring-offset: 3px;
+
+  /* --- Motion (mas-prefixed: the scoped --motion-ease on .masarak-home stays untouched) --- */
+  --mas-motion-fast: 160ms;   /* hover / active */
+  --mas-motion-base: 240ms;   /* feedback / dropdown */
+  --mas-motion-slow: 400ms;   /* entrance */
+  --mas-motion-reveal: 750ms; /* staged reveals only */
+  --mas-motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --mas-motion-stagger: 90ms;
+}
+
+/* Tailwind 4 mapping — exposes mas-* utilities (bg-mas-amber, text-mas-primary,
+   rounded-mas-lg, shadow-mas-e2, font-mas-display ...) for the Stage C page work. */
+@theme {
+  --color-mas-primary: #173b43;
+  --color-mas-primary-dark: #102f36;
+  --color-mas-sage: #e8f0eb;
+  --color-mas-amber: #e9aa4b;
+  --color-mas-bg: #f5f8f5;
+  --color-mas-surface: #ffffff;
+  --color-mas-muted: #687d7c;
+  --color-mas-border: #e3eae5;
+  --color-mas-amber-hover: #f2bd6d;
+  --color-mas-amber-tint: #fff4e4;
+  --color-mas-amber-text: #b47a2c;
+  --color-mas-soft-teal: #edf4f1;
+  --color-mas-soft-sage: #e8f0eb;
+  --color-mas-soft-amber: #fff4e4;
+  --color-mas-success: #23745f;
+  --color-mas-success-tint: #e6f2eb;
+  --color-mas-danger: #b42318;
+  --color-mas-danger-tint: #fef2f2;
+  --radius-mas-sm: 8px;
+  --radius-mas-md: 10px;
+  --radius-mas-lg: 12px;
+  --radius-mas-xl: 16px;
+  --shadow-mas-e1: 0 1px 2px rgb(23 59 67 / 5%), 0 2px 8px rgb(23 59 67 / 4%);
+  --shadow-mas-e2: 0 6px 16px rgb(23 59 67 / 8%);
+  --shadow-mas-e3: 0 12px 32px rgb(23 59 67 / 7%);
+  --font-mas-display: "Alexandria", "IBM Plex Sans Arabic", sans-serif;
+  --font-mas-body: "IBM Plex Sans Arabic", "Tajawal", "Noto Sans Arabic", Arial, sans-serif;
+}
+
+/* [STAGE-B] page-container mobile cascade repair.
+   The desktop redefinition earlier in this file came AFTER the original
+   @media (max-width: 760px) block, and since media queries add no
+   specificity it won the cascade at mobile widths, overriding the intended
+   mobile gutters/padding. Placing this corrected block after every base
+   definition restores the intended mobile values. Legacy definitions are
+   intentionally preserved (no deletion). */
+@media (max-width: 760px) {
+  .page-container {
+    width: calc(100% - 28px);
+    margin-inline: auto;
+    padding-block: 32px 50px;
+  }
+}
+
+/* [STAGE-B] unified field focus ring (brand amber).
+   Same selector as the brand layer's input:focus, placed later in source
+   order so the amber ring replaces the previous teal focus. Other focusable
+   elements use the global amber ring. */
+.auth-card .auth-field input:focus {
+  border-color: var(--mas-amber);
+  box-shadow: 0 0 0 3px rgb(233 170 75 / 16%);
+}
+
+/* [STAGE-B] HeroUI styling bridge — scoped to the ONLY HeroUI components
+   rendered anywhere in the app (components/dashboard-client.tsx):
+   Card (class "card card--default") and ProgressBar (data-slot
+   "progress-bar-track"/"progress-bar-fill"). No other HeroUI component is
+   affected. Phase 0's approved rules earlier in this file target the older
+   data-slot="track"/"fill" naming which @heroui/react 3.2.7 no longer
+   renders; those rules are preserved untouched and these sibling selectors
+   restore the same approved values on the current DOM. */
+.dashboard-progress [data-slot="progress-bar-track"] {
+  height: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e9eaf2;
+}
+
+.dashboard-progress [data-slot="progress-bar-fill"] {
+  border-radius: 999px;
+  background: #4e8975;
+}
+
+.card--default {
+  background: var(--mas-surface);
+  border-color: var(--mas-border);
+}
+
+/* [STAGE-B] global reduced-motion strategy.
+   One comprehensive block; the pre-existing scattered reduced-motion blocks
+   above are preserved. Corrects the flagged gap where looping keyframes
+   (animation-iteration-count) kept running under reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* [STAGE-B] end of design system foundation layer */
+
+/* =========================================================
+   [STAGE-C1] Landing page refinements (app/page.tsx visual pass)
+   ========================================================= */
+
+/* Roadmap demo: on stacked layouts (< 900px) show the module rows —
+   the actual product preview — before the dark summary panel, so the
+   section reads content-first and the panel closes it with the CTA. */
+@media (max-width: 900px) {
+  .masarak-home .masarak-roadmap-demo-content {
+    order: 1;
+  }
+
+  .masarak-home .masarak-roadmap-demo-sidebar {
+    order: 2;
+  }
+}
+
+/* =========================================================
+   [STAGE-C2] Dashboard & shared app-page typography cohesion.
+   Applies the brand display face (same pairing the landing uses)
+   to app-page headings so every page reads as one product.
+   Values come from --mas-* tokens (Stage B layer).
+   ========================================================= */
+.dashboard-welcome h1,
+.page-heading h1,
+.module-detail-header h1,
+.panel-heading h2,
+.next-step h3,
+.dashboard-empty h3,
+.resource-card h3,
+.stat-value {
+  font-family: var(--mas-font-display);
+  letter-spacing: 0;
+}
+
+.dashboard-welcome h1 {
+  line-height: 1.5;
+}
+
+/* [STAGE-C2] cascade-order safety: align the last order-dependent legacy
+   purple values to the brand tokens the later brand layer already shows.
+   No visible change on any page; removes dependency on source order. */
+.eyebrow-dot {
+  /* was #7667f3 (legacy purple); brand layer already renders amber */
+  background: var(--mas-amber);
+}
+
+.step-icon {
+  /* was #f0eeff (legacy purple tint); brand layer already renders soft sage */
+  background: var(--mas-soft-sage);
+}
+
+.next-step {
+  /* was #f5f3ff / #e7e3ff (legacy purple panel); brand layer already
+     renders soft teal with its existing border value */
+  background: var(--mas-soft-teal);
+  border-color: #dce9e1;
+}
+
+/* [STAGE-C3] Roadmap page — brand display typography on headings and the
+   progress numeral; matches the landing + dashboard pairing. */
+.roadmap-heading h1,
+.roadmap-progress-title h2,
+.roadmap-section-heading h2,
+.roadmap-stage-content h3,
+.roadmap-progress-percentage strong {
+  font-family: var(--mas-font-display);
+  letter-spacing: 0;
+}
+
+/* [STAGE-C3] Roadmap loading state: the .dashboard-loading spinner block is
+   reused from the TSX side; neutralize the legacy text-only padding so the
+   centered flex state defines the layout. */
+.roadmap-loading {
+  padding-top: 0;
+  text-align: start;
+}
+
+/* =========================================================
+   [STAGE-C4] Module details — Arabic line-height for the display
+   heading + display face on section headings; cascade-safe
+   alignment of the last slate list color (no visible change).
+   ========================================================= */
+.module-detail-header h1 {
+  line-height: 1.45;
+}
+
+.detail-section h2,
+.task-card h3 {
+  font-family: var(--mas-font-display);
+  letter-spacing: 0;
+}
+
+.detail-list li {
+  /* aligns the Gen1 slate #454d60 to the brand-layer value it already loses to */
+  color: #526b6b;
+}
+
+/* [STAGE-C4] Bidi correctness: English curriculum sentences embedded in RTL
+   paragraphs must keep their own base direction so trailing punctuation
+   stays on the correct side. plaintext = base direction from first strong
+   character, layout stays RTL. */
+.module-detail-header > p,
+.detail-list li > span:last-child,
+.task-card > p {
+  unicode-bidi: plaintext;
+}
+
+/* =========================================================
+   [STAGE-C5] Quiz page — brand amber replaces the last legacy
+   purple, bidi-correct English quiz content inside RTL layout,
+   display face on quiz headings.
+   ========================================================= */
+.quiz-question-number {
+  /* was legacy purple #5b4ce2 (visible brand correction) */
+  color: var(--mas-amber-text);
+}
+
+.quiz-option.is-selected {
+  /* was legacy purple #5b4ce2 / #f1efff (visible brand correction,
+     matches the amber selection language used across the app) */
+  border-color: var(--mas-amber);
+  background: var(--mas-amber-tint);
+}
+
+.quiz-header h1,
+.quiz-result h2,
+.quiz-review-item h3 {
+  font-family: var(--mas-font-display);
+  letter-spacing: 0;
+}
+
+/* English quiz data (prompts, options, explanations) keeps its own
+   base direction; punctuation lands on the correct side. */
+.quiz-question-card h2,
+.quiz-option > span:last-child,
+.quiz-review-item h3,
+.quiz-review-item p,
+.quiz-review-item .stat-note {
+  unicode-bidi: plaintext;
+}
+
+/* [STAGE-C6] Auth pages — brand display face on the card heading. */
+.auth-card h1 {
+  font-family: var(--mas-font-display);
+  letter-spacing: 0;
+  line-height: 1.5;
+}
+
+/* [STAGE-C7] Onboarding & placement assessment — display face on
+   headings; question content bidi is covered by the C-5 rules
+   (shared .quiz-question-card / .quiz-option classes). */
+.onboarding-heading h1,
+.onboarding-option h2,
+.quiz-header h1 {
+  font-family: var(--mas-font-display);
+  letter-spacing: 0;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   [STAGE-C9] Global states (not-found + error boundary) —
+   one shared on-brand treatment for full-page states.
+   ========================================================= */
+.mas-state-page {
+  display: grid;
+  place-items: center;
+  min-height: 62vh;
+}
+
+.mas-state-card {
+  width: min(100%, 520px);
+  margin-inline: auto;
+  padding: 44px 34px;
+  text-align: center;
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+}
+
+.mas-state-card h1 {
+  margin: 0;
+  font-family: var(--mas-font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--mas-primary);
+  line-height: 1.5;
+}
+
+.mas-state-card p {
+  margin: 0;
+  max-width: 42ch;
+  color: var(--mas-muted);
+  font-size: var(--mas-text-small);
+  line-height: 1.9;
+}
+
+.mas-state-code {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--mas-amber-tint);
+  color: var(--mas-amber-text);
+  font-family: var(--mas-font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.mas-state-card .dashboard-actions {
+  justify-content: center;
+  margin-top: 6px;
+}
+
+/* [STAGE-C9] Next/Image aspect-ratio safety for brand logos whose width
+   is set by CSS or props: keep intrinsic height ratio. */
+.footer-brand-logo,
+.auth-brand-logo,
+.masarak-final-logo,
+.site-brand-logo {
+  height: auto;
 }

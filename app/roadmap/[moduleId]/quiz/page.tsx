@@ -13,6 +13,10 @@ type Props = {
   params: Promise<{ moduleId: string }>;
 };
 
+/* [STAGE-C5] Same instant-shell opt-out as the module page: params are read
+   per request, so the shell-reuse optimization is not applicable. */
+export const instant = false;
+
 export function generateStaticParams() {
   return curriculum.map((roadmapModule) => ({
     moduleId: roadmapModule.id,

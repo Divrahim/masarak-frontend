@@ -3,8 +3,9 @@
 
 import Link from "next/link";
 import {
-  ArrowRight,
+  ArrowLeft,
   CheckCircle2,
+  Loader2,
   LockKeyhole,
   Target,
 } from "lucide-react";
@@ -14,7 +15,12 @@ export function ModuleProgressBadge({ moduleId }: { moduleId: string }) {
   const { hydrated, getStatus } = useLearningProgress();
 
   if (!hydrated) {
-    return <span className="status-pill">Loading status...</span>;
+    return (
+      <span className="status-pill">
+        <Loader2 size={14} />
+        جاري تحميل الحالة...
+      </span>
+    );
   }
 
   const status = getStatus(moduleId);
@@ -30,10 +36,10 @@ export function ModuleProgressBadge({ moduleId }: { moduleId: string }) {
       )}
 
       {status === "completed"
-        ? "Completed"
+        ? "مكتملة"
         : status === "current"
-          ? "Ready to learn"
-          : "Locked — prerequisites required"}
+          ? "جاهزة للتعلم"
+          : "مقفولة — لازم تكمّل المتطلبات"}
     </span>
   );
 }
@@ -50,13 +56,13 @@ export function ModuleQuizAction({ moduleId }: { moduleId: string }) {
   if (status === "locked") {
     return (
       <section className="panel detail-section">
-        <h2>Knowledge checkpoint</h2>
+        <h2>اختبار المرحلة</h2>
         <p>
-          Pass the prerequisite quizzes first. This module will unlock when
-          its prerequisites are completed.
+          لازم تجتاز اختبارات المتطلبات الأول. المرحلة هتتفتح لما تكمّل
+          متطلباتها.
         </p>
         <Link href="/roadmap" className="button-secondary">
-          View roadmap <ArrowRight size={16} />
+          افتح خريطة المسار <ArrowLeft size={16} />
         </Link>
       </section>
     );
@@ -64,10 +70,10 @@ export function ModuleQuizAction({ moduleId }: { moduleId: string }) {
 
   return (
     <section className="panel detail-section">
-      <h2>Knowledge checkpoint</h2>
+      <h2>اختبار المرحلة</h2>
       <p>
-        Check your understanding with a short quiz. Passing marks this module
-        complete and unlocks the next eligible stage.
+        اختبر فهمك باختبار قصير. الاجتياز بيوثّق المرحلة كمكتملة وبيفتح
+        المرحلة اللي بعدها.
       </p>
 
       <Link
@@ -75,8 +81,8 @@ export function ModuleQuizAction({ moduleId }: { moduleId: string }) {
         className="button-primary"
         style={{ width: "100%", marginTop: 12 }}
       >
-        {status === "completed" ? "Review quiz" : "Start module quiz"}
-        <ArrowRight size={16} />
+        {status === "completed" ? "راجع الاختبار" : "ابدأ اختبار المرحلة"}
+        <ArrowLeft size={16} />
       </Link>
     </section>
   );

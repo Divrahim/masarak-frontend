@@ -32,15 +32,13 @@ export default function ModuleContentGate({
       <div style={{ display: "flex", alignItems: "flex-start", gap: 14 }}>
         <LockKeyhole size={24} />
         <div>
-          <h2>Learning content locked</h2>
+          <h2>محتوى التعلم مقفول</h2>
           <p>
-            Pass the quizzes for this module&apos;s prerequisites to unlock
-            its learning resources, completion criteria, practical task, and
-            knowledge checkpoint.
+            اجتز اختبارات متطلبات المرحلة دي عشان تفتح مصادر التعلم، ومعايير
+            الإتمام، والمهمة العملية، واختبار المرحلة.
           </p>
           <p className="stat-note">
-            You can preview the learning objectives and prerequisites while
-            this module is locked.
+            والمرحلة مقفولة، تقدر تستعرض أهداف التعلم والمتطلبات السابقة.
           </p>
         </div>
       </div>

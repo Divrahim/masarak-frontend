@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import { Hub } from "@lucasmarkes/hairline/react";
 import { useEffect } from "react";
 import Link from "next/link";
@@ -593,9 +593,16 @@ export default function HomePage() {
       {/* FINAL CTA */}
       <section className="masarak-final-section">
         <div className="masarak-container masarak-final-content" data-reveal>
-          <span className="masarak-final-mark">
-            <Compass size={26} />
-          </span>
+     <div className="masarak-final-mark">
+  <Image
+    src="/masarak-symbol-transparent.png"
+    alt="رمز مسارك"
+    width={52}
+    height={52}
+    priority
+    className="masarak-final-logo"
+  />
+</div>
 
           <SectionLabel>ابدأ رحلتك</SectionLabel>
 

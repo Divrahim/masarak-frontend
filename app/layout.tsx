@@ -1,8 +1,7 @@
-
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
-import { Compass } from "lucide-react";
 
 import "./globals.css";
 import { LearningProgressProvider } from "@/components/learning-progress-provider";
@@ -52,22 +51,19 @@ export default function RootLayout({
 
         <footer className="site-footer">
           <div className="footer-inner">
-            <Link href="/" className="brand footer-brand">
-              <span className="brand-mark">
-                <Compass size={19} />
-              </span>
-              <span>
-                مسارك<span className="brand-period">.</span>
-              </span>
+            <Link href="/" className="footer-brand">
+              <Image
+                src="/masarak-logo-transparent.png"
+                alt="مسارك MASARAK"
+                width={200}
+                height={62}
+                className="footer-brand-logo"
+              />
             </Link>
 
-            <p>
-              طريق أوضح من التعلم إلى التطبيق.
-            </p>
+            <p>طريق أوضح من التعلم إلى التطبيق.</p>
 
-            <span>
-              صُممت لمساعدة الجيل القادم من المطورين.
-            </span>
+            <span></span>
           </div>
         </footer>
       </body>

@@ -3,130 +3,239 @@
 
 import Link from "next/link";
 import {
-  ArrowRight,
+  ArrowLeft,
   CheckCircle2,
   Clock3,
   LockKeyhole,
+  Route,
+  Sparkles,
 } from "lucide-react";
+
 import { curriculum } from "@/lib/curriculum";
 import { useLearningProgress } from "@/components/learning-progress-provider";
 
 const statusLabels = {
-  completed: "Completed",
-  current: "Current stage",
-  locked: "Locked",
+  completed: "مكتملة",
+  current: "المرحلة الحالية",
+  locked: "مقفولة",
 } as const;
 
+function formatDuration(duration: string) {
+  const match = duration.match(/^(\d+)\s+weeks?$/i);
+
+  if (!match) return duration;
+
+  const weeks = Number(match[1]);
+
+  if (weeks === 1) return "أسبوع واحد";
+  if (weeks === 2) return "أسبوعان";
+  return `${weeks} أسابيع`;
+}
+
 export default function RoadmapClient() {
-  const { completedModuleIds, getStatus, hydrated } = useLearningProgress();
+  const { completedModuleIds, getStatus, hydrated } =
+    useLearningProgress();
 
   if (!hydrated) {
     return (
-      <div className="page-container">
-        <p className="stat-note">Loading learning progress...</p>
+      <div className="page-container roadmap-loading" dir="rtl">
+        <p className="stat-note">
+          جاري تحميل تقدمك في المسار...
+        </p>
       </div>
     );
   }
 
   const completedCount = completedModuleIds.length;
-  const progress = Math.round((completedCount / curriculum.length) * 100);
+  const progress = Math.round(
+    (completedCount / curriculum.length) * 100
+  );
+
+  const currentModule = curriculum.find(
+    (item) => getStatus(item.id) === "current"
+  );
+
+  const stages = curriculum.map((item) => ({
+    ...item,
+    status: getStatus(item.id),
+  }));
 
   return (
-    <div className="page-container">
-      <div className="page-heading">
-        <span className="eyebrow">Your learning path</span>
-        <h1>The Full-Stack Roadmap</h1>
-        <p>
-          The entire journey, from understanding the web to building and
-          deploying a complete application. Pass each stage&apos;s quiz to
-          unlock the next stage. Practical projects remain separate from
-          progression.
-        </p>
-      </div>
+    <div className="page-container roadmap-page" dir="rtl">
+      <section className="roadmap-heading">
+        <div className="roadmap-heading-content">
+          <span className="roadmap-eyebrow">
+            <Route size={15} />
+            رحلتك التعليمية
+          </span>
 
-      <section className="roadmap-overview">
-        <div>
-          <h2>Your journey at a glance</h2>
+          <h1>
+            رحلتك في <span>هندسة الويب</span>
+          </h1>
+
           <p>
-            {curriculum.length} stages · {completedCount} completed
+            من أول خطوة في عالم الويب، لحد ما تبني مشاريع
+            حقيقية وتكون مستعد لسوق العمل.
+            <br />
+            كل مرحلة بتقربك من هدفك.
           </p>
         </div>
 
-        <div style={{ minWidth: 170 }}>
-          <div className="preview-stat">
-            <span>Overall progress</span>
-            <strong>{progress}%</strong>
-          </div>
-          <div
-            className="preview-progress"
-            role="progressbar"
-            aria-label="Overall roadmap progress"
-            aria-valuenow={progress}
-            aria-valuemin={0}
-            aria-valuemax={100}
-          >
-            <span style={{ width: `${progress}%` }} />
-          </div>
+        <div
+          className="roadmap-heading-decoration"
+          aria-hidden="true"
+        >
+          <Sparkles size={28} />
         </div>
       </section>
 
-      <div className="module-list roadmap-track">
-        {curriculum.map((item) => {
-          const status = getStatus(item.id);
-          const StatusIcon =
-            status === "completed"
-              ? CheckCircle2
-              : status === "current"
-                ? ArrowRight
-                : LockKeyhole;
+      <section className="roadmap-progress-card">
+        <div className="roadmap-progress-main">
+          <div className="roadmap-progress-title">
+            <span className="roadmap-progress-icon">
+              <Route size={20} />
+            </span>
 
-          return (
-            <article
-              className={`roadmap-card ${status === "locked" ? "is-locked" : ""}`}
-              key={item.id}
-            >
-              <Link
-                href={`/roadmap/${item.id}`}
-                className="module-card"
-                aria-label={`View module ${item.number}: ${item.title}`}
+            <div>
+              <h2>تقدمك في المسار</h2>
+              <p>استمر، كل خطوة بتفرق!</p>
+            </div>
+          </div>
+
+          <div className="roadmap-progress-percentage">
+            <strong>{progress}%</strong>
+            <span>نسبة الإنجاز</span>
+          </div>
+        </div>
+
+        <div
+          className="roadmap-progress-track"
+          role="progressbar"
+          aria-label="نسبة التقدم في المسار"
+          aria-valuenow={progress}
+          aria-valuemin={0}
+          aria-valuemax={100}
+        >
+          <span style={{ width: `${progress}%` }} />
+        </div>
+
+        <div className="roadmap-progress-footer">
+          <span>
+            <strong>{curriculum.length}</strong>
+            إجمالي المراحل
+          </span>
+
+          <span>
+            <strong>{completedCount}</strong>
+            مراحل مكتملة
+          </span>
+
+          <span>
+            <strong>
+              {currentModule ? currentModule.number : "—"}
+            </strong>
+            المرحلة الحالية
+          </span>
+        </div>
+      </section>
+
+      <section className="roadmap-stages-section">
+        <div className="roadmap-section-heading">
+          <div>
+            <span className="roadmap-section-eyebrow">
+              خطوات رحلتك
+            </span>
+
+            <h2>محطات المسار</h2>
+
+            <p>
+              اتعلم، طبّق، واجتاز الاختبار عشان تفتح المرحلة اللي بعدها.
+            </p>
+          </div>
+
+          <span className="roadmap-stage-count">
+            {curriculum.length} مراحل
+          </span>
+        </div>
+
+        <div className="roadmap-timeline">
+          {stages.map((item) => {
+            const status = item.status;
+
+            const StatusIcon =
+              status === "completed"
+                ? CheckCircle2
+                : status === "current"
+                  ? ArrowLeft
+                  : LockKeyhole;
+
+            return (
+              <article
+                className={`roadmap-stage roadmap-stage-${status}`}
+                key={item.id}
               >
-                <div className="module-number">{item.number}</div>
-
-                <div className="module-content">
-                  <div className="module-meta" style={{ marginBottom: 7 }}>
-                    <span className={`status-pill ${status}`}>
-                      <StatusIcon size={13} />
-                      {statusLabels[status]}
-                    </span>
-                    <span>
-                      <Clock3
-                        size={13}
-                        style={{ display: "inline", verticalAlign: "middle" }}
-                      />{" "}
-                      {item.duration}
-                    </span>
-                  </div>
-
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
-
-                  <div className="module-meta">
-                    {item.skills.map((skill) => (
-                      <span key={skill}>{skill}</span>
-                    ))}
-                  </div>
+                <div className="roadmap-stage-marker">
+                  {status === "completed" ? (
+                    <CheckCircle2 size={20} />
+                  ) : (
+                    <span>{item.number}</span>
+                  )}
                 </div>
 
-                <ArrowRight size={19} color="#858ba0" />
-              </Link>
-            </article>
-          );
-        })}
-      </div>
+                <Link
+                  href={`/roadmap/${item.id}`}
+                  className="roadmap-stage-card"
+                  aria-label={`عرض المرحلة ${item.number}: ${item.title}`}
+                >
+                  <div className="roadmap-stage-top">
+                    <span className={`roadmap-status ${status}`}>
+                      <StatusIcon size={14} />
+                      {statusLabels[status]}
+                    </span>
 
-      <p className="stat-note" style={{ marginTop: 20 }}>
-        Progress is saved in this browser for the prototype. A completed quiz
-        unlocks the next eligible stage; mentor review is not required.
+                    <span className="roadmap-stage-duration">
+                      <Clock3 size={14} />
+                      {formatDuration(item.duration)}
+                    </span>
+                  </div>
+
+                  <div className="roadmap-stage-body">
+                    <div className="roadmap-stage-content">
+                      <h3 dir="ltr">{item.title}</h3>
+
+                      <p dir="ltr">{item.description}</p>
+
+                      <div
+                        className="roadmap-stage-skills"
+                        dir="ltr"
+                      >
+                        {item.skills.map((skill) => (
+                          <span key={skill}>{skill}</span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <span className="roadmap-stage-arrow">
+                      <ArrowLeft size={19} />
+                    </span>
+                  </div>
+
+                  {status === "current" && (
+                    <div className="roadmap-stage-action">
+                      <span>ابدأ أو استكمل المرحلة</span>
+                      <ArrowLeft size={17} />
+                    </div>
+                  )}
+                </Link>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      <p className="roadmap-note">
+        يتم حفظ تقدمك في هذا المتصفح. اجتياز اختبار كل مرحلة
+        يفتح لك المرحلة التالية.
       </p>
     </div>
   );

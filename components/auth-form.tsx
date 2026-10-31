@@ -1,6 +1,6 @@
-
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useActionState } from "react";
 import {
@@ -17,6 +17,7 @@ const initialState: AuthActionState = {};
 
 export default function AuthForm({ mode }: AuthFormProps) {
   const action = mode === "signup" ? signUpAction : signInAction;
+
   const [state, formAction, isPending] = useActionState(
     action,
     initialState,
@@ -26,9 +27,23 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
   return (
     <section className="auth-card">
+      <div className="auth-brand">
+        <Link href="/" aria-label="العودة إلى الصفحة الرئيسية">
+          <Image
+            src="/masarak-logo-transparent.png"
+            alt="مسارك MASARAK"
+            width={240}
+            height={74}
+            className="auth-brand-logo"
+          />
+        </Link>
+      </div>
+
       <span className="eyebrow">MASAR ACCOUNT</span>
 
-      <h1>{isSignUp ? "Create your account" : "Welcome back"}</h1>
+      <h1>
+        {isSignUp ? "Create your account" : "Welcome back"}
+      </h1>
 
       <p className="auth-description">
         {isSignUp
@@ -68,12 +83,17 @@ export default function AuthForm({ mode }: AuthFormProps) {
             id="password"
             name="password"
             type="password"
-            autoComplete={isSignUp ? "new-password" : "current-password"}
+            autoComplete={
+              isSignUp ? "new-password" : "current-password"
+            }
             minLength={8}
             required
           />
+
           {isSignUp && (
-            <p className="auth-hint">Use at least 8 characters.</p>
+            <p className="auth-hint">
+              Use at least 8 characters.
+            </p>
           )}
         </div>
 
@@ -103,7 +123,9 @@ export default function AuthForm({ mode }: AuthFormProps) {
       </form>
 
       <p className="auth-switch">
-        {isSignUp ? "Already have an account?" : "New to Masar?"}{" "}
+        {isSignUp
+          ? "Already have an account?"
+          : "New to Masar?"}{" "}
         <Link href={isSignUp ? "/login" : "/signup"}>
           {isSignUp ? "Sign in" : "Create an account"}
         </Link>

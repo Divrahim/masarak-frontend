@@ -3,11 +3,12 @@
 
 import Link from "next/link";
 import {
-  ArrowRight,
+  ArrowLeft,
   BookOpen,
   CheckCircle2,
   Clock3,
   Compass,
+  Loader2,
   Target,
   ClipboardCheck,
 } from "lucide-react";
@@ -16,6 +17,23 @@ import { NumberRoll } from "@/components/number-roll";
 import { curriculum } from "@/lib/curriculum";
 import { useLearningProgress } from "@/components/learning-progress-provider";
 
+/* Presentation-only helper: curriculum durations are English data
+   ("1 week" / "2 weeks" / "3 weeks"); this maps them to Arabic for
+   display without touching the shared curriculum data. */
+function formatDurationAr(duration: string): string {
+  const match = /^(\d+)\s+weeks?$/.exec(duration.trim());
+
+  if (!match) {
+    return duration;
+  }
+
+  const count = Number(match[1]);
+
+  if (count === 1) return "أسبوع";
+  if (count === 2) return "أسبوعين";
+  return `${count} أسابيع`;
+}
+
 export default function DashboardClient() {
   const { completedModuleIds, getStatus, hydrated, loadError } =
     useLearningProgress();
@@ -23,7 +41,10 @@ export default function DashboardClient() {
   if (!hydrated) {
     return (
       <div className="page-container">
-        <p className="stat-note">Loading learning progress...</p>
+        <div className="dashboard-loading" role="status">
+          <Loader2 size={22} className="dashboard-loading-spinner" />
+          <span>بنجهّز بيانات تقدمك...</span>
+        </div>
       </div>
     );
   }
@@ -46,17 +67,18 @@ export default function DashboardClient() {
     <div className="page-container">
       <div className="dashboard-welcome">
         <div>
-          <span className="eyebrow">Student workspace</span>
-          <h1>Your journey, at a glance.</h1>
+          <span className="eyebrow">مساحة الطالب</span>
+          <h1>رحلتك كلها... في لمحة.</h1>
           <p>
-            See where you are, review your progress, and decide what to do next.
+            شوف وين واصل، راجع تقدمك، وحدّد خطوتك الجاية.
           </p>
         </div>
 
         <div className="dashboard-actions">
           <div className="hero-actions">
             <Link href="/roadmap" className="button-primary">
-              Open roadmap <ArrowRight size={17} />
+              افتح خريطة المسار
+              <ArrowLeft size={17} />
             </Link>
 
             <Link
@@ -64,16 +86,9 @@ export default function DashboardClient() {
               className="button-secondary"
             >
               <ClipboardCheck size={17} />
-              Assess my current skills
+              قيّم مهاراتك
             </Link>
           </div>
-
-          <Link
-            href="/onboarding/assessment"
-            className="button-secondary"
-          >
-            Reassess skills
-          </Link>
         </div>
       </div>
 
@@ -87,29 +102,31 @@ export default function DashboardClient() {
         <Card className="stat-card">
           <div className="stat-label">
             <BookOpen size={17} />
-            Verified stages
+            المراحل الموثّقة
           </div>
 
           <div className="stat-value">
-            <NumberRoll
-              value={verifiedCount}
-              from={0}
-              duration={1100}
-            />
-            <span className="stat-note">
-              {" "}/ {curriculum.length}
+            <span dir="ltr" className="stat-value-ltr">
+              <NumberRoll
+                value={verifiedCount}
+                from={0}
+                duration={1100}
+              />
+              <span className="stat-note">
+                {" "}/ {curriculum.length}
+              </span>
             </span>
           </div>
 
           <div className="stat-note">
-            Verified through assessment or module quizzes
+            موثّقة عبر التقييم أو اختبارات المراحل
           </div>
         </Card>
 
         <Card className="stat-card">
           <div className="stat-label">
             <Target size={17} />
-            Roadmap progress
+            تقدمك في الخريطة
           </div>
 
           <div className="stat-value">
@@ -118,11 +135,12 @@ export default function DashboardClient() {
               from={0}
               suffix="%"
               duration={1200}
+              dir="ltr"
             />
           </div>
 
           <ProgressBar
-            aria-label="Roadmap progress"
+            aria-label="تقدمك في الخريطة"
             value={progress}
             className="dashboard-progress"
           >
@@ -135,17 +153,17 @@ export default function DashboardClient() {
         <Card className="stat-card">
           <div className="stat-label">
             <Clock3 size={17} />
-            Current focus
+            تركيزك الحالي
           </div>
 
           <div className="stat-value" style={{ fontSize: 22 }}>
-            {currentModule?.title ?? "All current stages verified"}
+            {currentModule?.title ?? "كل مراحلك الحالية موثّقة"}
           </div>
 
           <div className="stat-note">
             {currentModule
-              ? `${currentModule.duration} estimated`
-              : "Review the roadmap or reassess your skills."}
+              ? `${formatDurationAr(currentModule.duration)} تقديريًا`
+              : "راجع الخريطة أو أعِد تقييم مهاراتك."}
           </div>
         </Card>
       </div>
@@ -155,8 +173,8 @@ export default function DashboardClient() {
           <div className="panel-heading">
             <h2>
               {currentModule
-                ? "Continue your journey"
-                : "Review your learning path"}
+                ? "كمّل رحلتك"
+                : "راجع مسار تعلّمك"}
             </h2>
             <Compass size={20} color="#173b43" />
           </div>
@@ -164,7 +182,7 @@ export default function DashboardClient() {
           {currentModule ? (
             <div className="next-step">
               <span className="status-pill current">
-                READY TO LEARN
+                جاهز للتعلم
               </span>
 
               <h3>{currentModule.title}</h3>
@@ -182,12 +200,12 @@ export default function DashboardClient() {
                       verticalAlign: "middle",
                     }}
                   />{" "}
-                  {currentModule.duration}
+                  {formatDurationAr(currentModule.duration)}
                 </span>
 
                 <span>·</span>
                 <span>
-                  {currentModule.skills.length} focus skills
+                  {currentModule.skills.length} مهارات مستهدفة
                 </span>
               </div>
 
@@ -195,28 +213,28 @@ export default function DashboardClient() {
                 href={`/roadmap/${currentModule.id}`}
                 className="button-primary"
               >
-                View current module
-                <ArrowRight size={17} />
+                افتح المرحلة الحالية
+                <ArrowLeft size={17} />
               </Link>
             </div>
           ) : (
             <div className="next-step">
-              <h3>Your current stages are verified.</h3>
+              <h3>كل مراحلك الحالية موثّقة.</h3>
               <p>
-                You can review the provisional roadmap or reassess
-                your skills to check your starting point again.
+                تقدر تراجع الخريطة المبدئية أو تعيد تقييم
+                مهاراتك للتأكد من نقطة بدايتك مرة تانية.
               </p>
 
               <div className="dashboard-actions">
                 <Link href="/roadmap" className="button-primary">
-                  Review roadmap
+                  راجع الخريطة
                 </Link>
 
                 <Link
                   href="/onboarding/assessment"
                   className="button-secondary"
                 >
-                  Reassess skills
+                  أعد تقييم مهاراتك
                 </Link>
               </div>
             </div>
@@ -225,7 +243,7 @@ export default function DashboardClient() {
 
         <Card className="panel">
           <div className="panel-heading">
-            <h2>Verified stages</h2>
+            <h2>المراحل الموثّقة</h2>
           </div>
 
           {verifiedModules.length > 0 ? (
@@ -245,25 +263,31 @@ export default function DashboardClient() {
 
                     <div style={{ flex: 1 }}>
                       <h3>{item.title}</h3>
-                      <p>Verified through a quiz or assessment</p>
+                      <p>موثّقة عبر اختبار أو تقييم</p>
                     </div>
 
-                    <ArrowRight size={16} color="#858ba0" />
+                    <ArrowLeft size={16} color="#858ba0" />
                   </Link>
                 ))}
             </div>
           ) : (
-            <p className="stat-note">
-              No stages have been verified yet. Start with your
-              current focus or take the skills assessment.
-            </p>
+            <div className="dashboard-empty">
+              <div className="dashboard-empty-icon">
+                <ClipboardCheck size={21} />
+              </div>
+              <h3>لسه مفيش مراحل موثّقة</h3>
+              <p>
+                ابدأ بتركيزك الحالي، أو اعمل تقييم المهارات
+                وحدد نقطة بدايتك.
+              </p>
+            </div>
           )}
         </Card>
       </div>
 
       <p className="stat-note" style={{ marginTop: 22 }}>
-        The current roadmap and its assessment content are
-        provisional and will be customized for Masarak.
+        الخريطة الحالية ومحتوى التقييم مبدئيان، وسيتم تخصيصهما
+        لمسارك.
       </p>
     </div>
   );

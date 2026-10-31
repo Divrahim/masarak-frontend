@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { Suspense } from "react";
 
 import "./globals.css";
 import { LearningProgressProvider } from "@/components/learning-progress-provider";
-import SiteHeader from "@/components/site-header";
+import SiteHeader, {
+  type HeaderSession,
+} from "@/components/site-header";
 
 export const metadata: Metadata = {
   title: {
@@ -15,6 +18,35 @@ export const metadata: Metadata = {
   description:
     "مسارك منصة تساعدك على تعلم هندسة الويب، وبناء مهاراتك العملية، والاستعداد لسوق العمل بخريطة تعلم واضحة.",
 };
+
+/* Presentation-only read of the demo session cookie so the header can
+   show the signed-in state. Auth logic itself stays untouched. */
+async function SiteHeaderWithSession() {
+  const cookieStore = await cookies();
+  const rawSession = cookieStore.get("masarak-demo-session")?.value;
+
+  let session: HeaderSession = null;
+
+  if (rawSession) {
+    try {
+      const parsed: unknown = JSON.parse(rawSession);
+
+      if (
+        parsed &&
+        typeof parsed === "object" &&
+        typeof (parsed as { displayName?: unknown }).displayName === "string"
+      ) {
+        session = {
+          displayName: (parsed as { displayName: string }).displayName,
+        };
+      }
+    } catch {
+      session = null;
+    }
+  }
+
+  return <SiteHeader session={session} />;
+}
 
 export default function RootLayout({
   children,
@@ -32,7 +64,7 @@ export default function RootLayout({
             />
           }
         >
-          <SiteHeader />
+          <SiteHeaderWithSession />
         </Suspense>
 
         <main>

@@ -4,17 +4,17 @@ import Link from "next/link";
 import AuthForm from "@/components/auth-form";
 
 export const metadata: Metadata = {
-  title: "Sign in | Masar",
-  description: "Sign in to your Masar learning account.",
+  title: "تسجيل الدخول",
+  description: "سجّل دخولك لحسابك التعليمي في مسار.",
 };
 
 export default function LoginPage() {
   return (
     <main className="page-container auth-page">
       <div className="breadcrumbs">
-        <Link href="/">Home</Link>
+        <Link href="/">الرئيسية</Link>
         <span>/</span>
-        <span>Sign in</span>
+        <span>تسجيل الدخول</span>
       </div>
 
       <AuthForm mode="login" />

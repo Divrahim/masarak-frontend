@@ -12,20 +12,19 @@ export default function PlacementAssessmentPage() {
         className="text-link inline-flex items-center gap-2"
       >
         <ArrowLeft size={17} />
-        Back to starting options
+        رجوع لخيارات البداية
       </Link>
 
       <header className="quiz-header">
         <span className="eyebrow">
-          Initial skills assessment
+          تقييم المهارات الأولي
         </span>
 
-        <h1>Let's find your starting point</h1>
+        <h1>هنحدد نقطة بدايتك</h1>
 
         <p>
-          Answer based on what you can confidently explain
-          or do. Your CV is optional and is not treated as
-          proof that you have mastered a skill.
+          جاوب على أساس اللي تقدر تشرحه أو تعمله بثقة. الـCV اختياري
+          ومش بيتحسب كدليل إنك أتقنت مهارة.
         </p>
       </header>
 

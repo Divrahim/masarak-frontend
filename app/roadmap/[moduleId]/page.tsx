@@ -4,7 +4,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
-  ArrowRight,
   BookOpen,
   CheckCircle2,
   CircleCheck,
@@ -29,6 +28,27 @@ import ModuleContentGate from "@/components/module-content-gate";
 type Props = {
   params: Promise<{ moduleId: string }>;
 };
+
+/* [STAGE-C4] This page must read `params` on every render (dynamic module
+   details), which Next 16 flags when it tries to reuse the instant shell.
+   Opting out keeps correct behavior; navigation to this route is simply
+   not instant-shell optimized. */
+export const instant = false;
+
+/* Presentation-only: durations are English curriculum data ("2 weeks"). */
+function formatDurationAr(duration: string): string {
+  const match = /^(\d+)\s+weeks?$/.exec(duration.trim());
+
+  if (!match) {
+    return duration;
+  }
+
+  const count = Number(match[1]);
+
+  if (count === 1) return "أسبوع واحد";
+  if (count === 2) return "أسبوعان";
+  return `${count} أسابيع`;
+}
 
 export function generateStaticParams() {
   return curriculum.map((roadmapModule) => ({
@@ -65,9 +85,9 @@ export default async function ModulePage({ params }: Props) {
   return (
     <div className="page-container">
       <div className="breadcrumbs">
-        <Link href="/">Home</Link>
+        <Link href="/">الرئيسية</Link>
         <span>/</span>
-        <Link href="/roadmap">Roadmap</Link>
+        <Link href="/roadmap">خريطة المسار</Link>
         <span>/</span>
         <span>{roadmapModule.title}</span>
       </div>
@@ -90,16 +110,16 @@ export default async function ModulePage({ params }: Props) {
               size={15}
               style={{ display: "inline", verticalAlign: "middle" }}
             />{" "}
-            {roadmapModule.duration}
+            {formatDurationAr(roadmapModule.duration)}
           </span>
           <span>·</span>
-          <span>{roadmapModule.skills.length} focus skills</span>
+          <span>{roadmapModule.skills.length} مهارات مستهدفة</span>
         </div>
 
         <div className="hero-actions">
           <Link href="/roadmap" className="button-secondary">
             <ArrowLeft size={17} />
-            Back to roadmap
+            رجوع لخريطة المسار
           </Link>
 
           {nextModule && (
@@ -107,8 +127,8 @@ export default async function ModulePage({ params }: Props) {
               href={`/roadmap/${nextModule.id}`}
               className="button-primary"
             >
-              Preview next stage
-              <ArrowRight size={17} />
+              استعرض المرحلة التالية
+              <ArrowLeft size={17} />
             </Link>
           )}
         </div>
@@ -122,7 +142,7 @@ export default async function ModulePage({ params }: Props) {
                 size={19}
                 style={{ display: "inline", verticalAlign: "middle" }}
               />{" "}
-              Learning objectives
+              أهداف التعلم
             </h2>
 
             <ul className="detail-list">
@@ -142,7 +162,7 @@ export default async function ModulePage({ params }: Props) {
                   size={19}
                   style={{ display: "inline", verticalAlign: "middle" }}
                 />{" "}
-                Learning resources
+                مصادر التعلم
               </h2>
 
               {roadmapModule.resources.map((resource) => (
@@ -175,7 +195,7 @@ export default async function ModulePage({ params }: Props) {
                   size={19}
                   style={{ display: "inline", verticalAlign: "middle" }}
                 />{" "}
-                Completion criteria
+                معايير الإتمام
               </h2>
 
               <ul className="detail-list">
@@ -192,11 +212,11 @@ export default async function ModulePage({ params }: Props) {
 
         <aside>
           <section className="panel">
-            <h2>Prerequisites</h2>
+            <h2>المتطلبات السابقة</h2>
 
             {prerequisites.length === 0 ? (
               <p className="stat-note">
-                No previous stages required. This is the starting point.
+                مفيش متطلبات سابقة — دي نقطة البداية.
               </p>
             ) : (
               <ul className="detail-list">
@@ -221,21 +241,21 @@ export default async function ModulePage({ params }: Props) {
             <section className="task-card detail-section">
               <span className="eyebrow">
                 <ListChecks size={15} />
-                Practical task
+                مهمة عملية
               </span>
 
-              <h3>Put your knowledge to work</h3>
+              <h3>طبّق اللي اتعلمته عمليًا</h3>
               <p>{roadmapModule.task}</p>
 
               <p className="stat-note">
-                Submission and mentor review will be enabled when the backend
-                workflow is implemented.
+                التسليم والمراجعة من الميّتور هيتفعّلوا لما تكتمل آليتهم في
+                الـbackend.
               </p>
             </section>
           </ModuleContentGate>
 
           <section className="panel detail-section">
-            <h2>Skills covered</h2>
+            <h2>المهارات المستهدفة</h2>
 
             <div className="module-meta">
               {roadmapModule.skills.map((skill) => (
@@ -253,7 +273,7 @@ export default async function ModulePage({ params }: Props) {
               style={{ width: "100%", marginTop: 18 }}
             >
               <ArrowLeft size={16} />
-              Previous stage
+              المرحلة السابقة
             </Link>
           )}
         </aside>

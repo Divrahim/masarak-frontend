@@ -34,27 +34,28 @@ export default function AuthForm({ mode }: AuthFormProps) {
             alt="مسارك MASARAK"
             width={240}
             height={74}
+            priority
             className="auth-brand-logo"
           />
         </Link>
       </div>
 
-      <span className="eyebrow">MASAR ACCOUNT</span>
+      <span className="eyebrow">حساب مسار</span>
 
       <h1>
-        {isSignUp ? "Create your account" : "Welcome back"}
+        {isSignUp ? "أنشئ حسابك" : "أهلًا بيك تاني"}
       </h1>
 
       <p className="auth-description">
         {isSignUp
-          ? "Create an account to start your learning journey and save your progress."
-          : "Sign in to continue your learning journey."}
+          ? "اعمل حساب عشان تبدأ رحلتك التعليمية وتحفظ تقدمك."
+          : "سجّل دخولك عشان تكمل رحلتك التعليمية."}
       </p>
 
       <form action={formAction} className="auth-form">
         {isSignUp && (
           <div className="auth-field">
-            <label htmlFor="displayName">Full name</label>
+            <label htmlFor="displayName">الاسم بالكامل</label>
             <input
               id="displayName"
               name="displayName"
@@ -67,7 +68,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
         )}
 
         <div className="auth-field">
-          <label htmlFor="email">Email address</label>
+          <label htmlFor="email">البريد الإلكتروني</label>
           <input
             id="email"
             name="email"
@@ -78,7 +79,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
         </div>
 
         <div className="auth-field">
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">كلمة السر</label>
           <input
             id="password"
             name="password"
@@ -92,7 +93,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
           {isSignUp && (
             <p className="auth-hint">
-              Use at least 8 characters.
+              استخدم ٨ حروف على الأقل.
             </p>
           )}
         </div>
@@ -115,19 +116,19 @@ export default function AuthForm({ mode }: AuthFormProps) {
           disabled={isPending}
         >
           {isPending
-            ? "Please wait..."
+            ? "لحظة من فضلك..."
             : isSignUp
-              ? "Create account"
-              : "Sign in"}
+              ? "إنشاء الحساب"
+              : "تسجيل الدخول"}
         </button>
       </form>
 
       <p className="auth-switch">
         {isSignUp
-          ? "Already have an account?"
-          : "New to Masar?"}{" "}
+          ? "عندك حساب بالفعل؟"
+          : "لسه معندكش حساب في مسار؟"}{" "}
         <Link href={isSignUp ? "/login" : "/signup"}>
-          {isSignUp ? "Sign in" : "Create an account"}
+          {isSignUp ? "سجّل دخولك" : "اعمل حسابك"}
         </Link>
       </p>
     </section>
